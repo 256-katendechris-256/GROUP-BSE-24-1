@@ -1,0 +1,29 @@
+name: build-test-deploy
+
+on: push
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Check for Build Script
+        run: |
+          if ! grep -q '"build":' package.json; then
+            echo "No build script found in package.json. Skipping build step."
+            echo "Skipping npm run build"
+            exit 0
+          fi
+
+      - name: Build Project
+        run: npm run build
