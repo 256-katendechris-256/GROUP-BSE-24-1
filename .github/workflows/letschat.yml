@@ -1,4 +1,4 @@
-name: hello-world
+name:LETS_CHAT
 on: push
 jobs: 
   hello-world-job:
