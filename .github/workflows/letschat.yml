@@ -1,29 +1,9 @@
-name: build-test-deploy
-
+name: hello-world
 on: push
-
 jobs: 
-  build:
+  hello-world-job:
     runs-on: ubuntu-latest
     steps: 
-      - name: Checkout Repository
+      - name: Check out repository code
         uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Check for Build Script
-        run: |
-          if ! grep -q '"build":' package.json; then
-            echo "No build script found in package.json. Skipping build step."
-            echo "Skipping npm run build"
-            exit 0
-          fi
-
-      - name: Build Project
-        run: npm run build
+      - run: echo "$(cat hello_world.txt)"
