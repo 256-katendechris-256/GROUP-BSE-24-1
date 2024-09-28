@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/256-katendechris-256/LETSCHAT.git"
+  },
+  "author": "Katende",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/256-katendechris-256/LETSCHAT/issues"
+  },
+  "homepage": "https://github.com/256-katendechris-256/LETSCHAT#readme",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
