@@ -6,7 +6,7 @@ const AuthPage = (props) => {
       const { value } = e.target[0];
 
       axios.post(
-        'http://localhost:3000/authenticate',
+        'http://localhost:3001/authenticate',
         {username: value}
       )
       .then ((res)=>{
