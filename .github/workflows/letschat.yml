@@ -45,9 +45,9 @@ jobs:
         run: npm install
         working-directory: backend  # Specify backend directory
 
-      # Step 7: Build backend
-      - name: Build backend
-        run: npm run build
+      # Step 7: Start backend (optional, for testing)
+      - name: Start backend (optional)
+        run: npm run start
         working-directory: backend
 
 
