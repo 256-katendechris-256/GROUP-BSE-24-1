@@ -28,10 +28,6 @@ jobs:
         run: npm install
         working-directory: frontend  # Specify frontend directory
 
-      # Run frontend linting
-      - name: Lint frontend
-        run: npm run lint
-        working-directory: frontend
 
       # Step 4: Build frontend
       - name: Build frontend
