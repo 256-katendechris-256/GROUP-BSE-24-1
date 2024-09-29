@@ -16,4 +16,8 @@ jobs:
         with:
           node-version: '18.x'  # Specify the Node.js version to use
 
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
       
