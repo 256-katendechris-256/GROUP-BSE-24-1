@@ -1,35 +1,41 @@
 version: 0.0
 
-os: linux  # or 'windows' if using a Windows instance
+os: linux  # If using an EC2 Linux instance, change to 'windows' if using Windows.
 
 # Specify the files to copy from your application source to the EC2 instance
 files:
   - source: /  # The root directory of your repository or deployment archive
     destination: /path/on/ec2/instance  # The target directory on the EC2 instance
-    overwrite: true
+    overwrite: true  # This will overwrite existing files in the destination directory
 
 # Specify the permissions (optional)
 permissions:
-  - object: /path/on/ec2/instance
-    owner: ec2-user  # The user on your EC2 instance that should own the file
-    group: ec2-user  # The group on your EC2 instance
-    mode: 755  # The permissions for the file or directory
+  - object: /path/on/ec2/instance  # Directory or file to set permissions on
+    owner: ec2-user  # Ensure the files are owned by the ec2-user
+    group: ec2-user  # The group should also be ec2-user
+    mode: 755  # Set permissions to 755 for read/execute access
 
 # Hooks define the lifecycle events and the scripts or commands that should be run during each phase
 hooks:
   BeforeInstall:
+    - location: scripts/remove_existing_file.sh  # A script to remove existing files before new deployment
+      timeout: 300
+      runas: root  # Run the script as the root user
     - location: scripts/install_dependencies.sh  # A script to run before the new revision is installed
       timeout: 300
       runas: root  # Run the script as the root user
+
   AfterInstall:
     - location: scripts/configure_application.sh  # A script to configure your application after installation
       timeout: 300
-      runas: root
+      runas: root  # Run the script as the root user
+
   ApplicationStart:
-    - location: scripts/start_application.sh  # A script to start your application
+    - location: scripts/start_application.sh  # A script to start your application after installation
       timeout: 300
-      runas: root
+      runas: root  # Run the script as the root user
+
   ValidateService:
     - location: scripts/validate_service.sh  # A script to validate that the application is running correctly
       timeout: 300
-      runas: root
+      runas: root  # Run the script as the root user
