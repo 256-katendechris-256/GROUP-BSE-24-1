@@ -5,15 +5,13 @@ os: linux
 files:
   - source: /
     destination: /path/on/ec2/instance
-    overwrite: true
-    exclude:
-      - README.md  # Exclude README.md from being deployed
+    overwrite: true  # Ensure existing files are overwritten, including README.md
 
 permissions:
   - object: /path/on/ec2/instance
     owner: ec2-user
     group: ec2-user
-    mode: 755
+    mode: 755  # Set file permissions
 
 hooks:
   BeforeInstall:
