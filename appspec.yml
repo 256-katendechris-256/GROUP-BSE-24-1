@@ -1,17 +1,35 @@
 version: 0.0
-os: linux
+
+os: linux  # or 'windows' if using a Windows instance
+
+# Specify the files to copy from your application source to the EC2 instance
 files:
-  - source: /index.html
-    destination: /var/www/html/
+  - source: /  # The root directory of your repository or deployment archive
+    destination: /path/on/ec2/instance  # The target directory on the EC2 instance
+    overwrite: true
+
+# Specify the permissions (optional)
+permissions:
+  - object: /path/on/ec2/instance
+    owner: ec2-user  # The user on your EC2 instance that should own the file
+    group: ec2-user  # The group on your EC2 instance
+    mode: 755  # The permissions for the file or directory
+
+# Hooks define the lifecycle events and the scripts or commands that should be run during each phase
 hooks:
   BeforeInstall:
-    - location: scripts/install_dependencies
+    - location: scripts/install_dependencies.sh  # A script to run before the new revision is installed
+      timeout: 300
+      runas: root  # Run the script as the root user
+  AfterInstall:
+    - location: scripts/configure_application.sh  # A script to configure your application after installation
       timeout: 300
       runas: root
-    - location: scripts/start_server
+  ApplicationStart:
+    - location: scripts/start_application.sh  # A script to start your application
       timeout: 300
       runas: root
-  ApplicationStop:
-    - location: scripts/stop_server
+  ValidateService:
+    - location: scripts/validate_service.sh  # A script to validate that the application is running correctly
       timeout: 300
       runas: root
