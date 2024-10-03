@@ -5,7 +5,9 @@ os: linux
 files:
   - source: /
     destination: /path/on/ec2/instance
-    overwrite: true  # This will overwrite existing files like README.md
+    overwrite: true
+    exclude:
+      - README.md  # Exclude README.md from being deployed
 
 permissions:
   - object: /path/on/ec2/instance
