@@ -1,4 +1,4 @@
 #!/bin/bash
-if [ -f /path/on/ec2/instance/.github/workflows/letschat.yml ]; then
-  rm /path/on/ec2/instance/.github/workflows/letschat.yml
-fi
+rm -f /path/on/ec2/instance/README.md
+rm -f /path/on/ec2/instance/appspec.yml
+# Add more files if needed
