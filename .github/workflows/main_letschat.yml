@@ -23,7 +23,10 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          cd frontend # change to your app directory
           npm install
+          npm run build # runs your build process, ensure you have a build script
+          npm test # optional, ensure a test script exists in your package.json
           
 
       - name: Zip artifact for deployment
