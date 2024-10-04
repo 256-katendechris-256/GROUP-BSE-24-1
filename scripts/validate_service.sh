@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# URL to validate the service
+# URL to validate the service (public GitHub repository)
 URL="https://api.github.com/repos/256-katendechris-256/GROUP-BSE-24-1"
 
-# API token for authentication
-TOKEN="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"
+# Perform the curl request without authentication
+HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}" $URL)
 
-# Perform the curl request with authentication
-curl -H "Authorization: Bearer $TOKEN" -o /dev/null -s -w "%{http_code}\n" $URL
+# Output the HTTP status code
+echo "HTTP Status Code: $HTTP_STATUS"
 
-# Check the HTTP status code returned
-if [ $? -ne 0 ]; then
-    echo "Service validation failed: Unable to reach the service."
+# Check if the request was successful (HTTP status code 200 indicates success)
+if [ "$HTTP_STATUS" -ne 200 ]; then
+    echo "Service validation failed: HTTP status $HTTP_STATUS."
     exit 1
 fi
 
