@@ -4,27 +4,58 @@
 name: Build and deploy Node.js app to Azure Web App - letschat
 
 on:
-  workflow_run:
-    workflows: ["Lets_Chat"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Download artifact created in Lets_Chat workflow
-      - name: Download artifact from Lets_Chat workflow
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: npm install, build, and test
+        run: |
+          cd frontend # change to your app directory
+          npm install
+          npm run build # runs your build process, ensure you have a build script
+          
+          
+
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-app
+          path: release.zip
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
+    steps:
+      - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: node-app  # Matches the uploaded artifact name
+          name: node-app
 
-      # Step 2: Unzip artifact for deployment
       - name: Unzip artifact for deployment
         run: unzip release.zip
-
-      # Step 3: Login to Azure
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -32,8 +63,7 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_491899D94CF749EFBA4E033888F1157F }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_B11CAF1FBD52415B88CBB92D38AF1976 }}
 
-      # Step 4: Deploy to Azure Web App
-      - name: Deploy to Azure Web App
+      - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
